@@ -1,12 +1,12 @@
 provider "vsphere" {
-  user                 = 
-  password             = 
-  vsphere_server       = 
+  user                 = var.vsphere_user
+  password             = var.vsphere_password
+  vsphere_server       = var.vsphere_server
   allow_unverified_ssl = true
 }
 
 data "vsphere_datacenter" "datacenter" {
-  name = "LAB-SILK"
+  name = var.vsphere_datacenter
 }
 
 data "vsphere_datastore" "datastore" {
@@ -30,7 +30,7 @@ data "vsphere_virtual_machine" "template" {
 }
 
 resource "vsphere_virtual_machine" "vm" {
-  name             = "silk-kube-master01"
+  name             = var.vm_name
   resource_pool_id = data.vsphere_compute_cluster.cluster.resource_pool_id
   datastore_id     = data.vsphere_datastore.datastore.id
 
@@ -41,15 +41,15 @@ resource "vsphere_virtual_machine" "vm" {
     network_id = data.vsphere_network.network.id
   }
   disk {
-    label = "silk-kube-master01"
-    size  = 20
+    label = var.vm_name
+    size  = 16
   }
   clone {
     template_uuid = data.vsphere_virtual_machine.template.id
     customize {
       linux_options {
-        host_name = "silk-kube-master01"
-        domain    = "example.com"
+        host_name = "var.vm_name"
+        domain    = " "
       }
       network_interface {
         ipv4_address = "10.200.110.100"
