@@ -6,31 +6,31 @@ provider "vsphere" {
 }
 
 data "vsphere_datacenter" "datacenter" {
-  name = "LAB-SILK"
+  name = var.vsphere_datacente
 }
 
 data "vsphere_datastore" "datastore" {
-  name          = "System"
+  name          = var.vsphere_datastore
   datacenter_id = data.vsphere_datacenter.datacenter.id
 }
 
 data "vsphere_compute_cluster" "cluster" {
-  name          = "LAB-SILK"
+  name          = var.vsphere_compute_cluster
   datacenter_id = data.vsphere_datacenter.datacenter.id
 }
 
 data "vsphere_network" "network" {
-  name          = "Kubernetes (Vlan 110)"
+  name          = var.vsphere_network
   datacenter_id = data.vsphere_datacenter.datacenter.id
 }
 
 data "vsphere_virtual_machine" "template" {
-  name          = "ubuntu-temp-22.04.2"
+  name          = var.vsphere_template
   datacenter_id = data.vsphere_datacenter.datacenter.id
 }
 
 resource "vsphere_virtual_machine" "vm" {
-  name             = "silk-kube-master01"
+  name             = var.vm_hostname
   resource_pool_id = data.vsphere_compute_cluster.cluster.resource_pool_id
   datastore_id     = data.vsphere_datastore.datastore.id
 
@@ -41,21 +41,21 @@ resource "vsphere_virtual_machine" "vm" {
     network_id = data.vsphere_network.network.id
   }
   disk {
-    label = "silk-kube-master01"
+    label = var.vm_hostname
     size  = 20
   }
   clone {
     template_uuid = data.vsphere_virtual_machine.template.id
     customize {
       linux_options {
-        host_name = "silk-kube-master01"
+        host_name = var.vm_hostname
         domain    = "example.com"
       }
       network_interface {
-        ipv4_address = "10.200.110.100"
+        ipv4_address = var.vm_ipaddress
         ipv4_netmask = 24
       }
-      ipv4_gateway = "10.200.110.1"
+      ipv4_gateway = var.vm_gateway
     }
   }
 }
