@@ -1,7 +1,7 @@
 cpu                    = 4
 cores-per-socket       = 1
 ram                    = 4096
-disksize               = 100 # in GB
+disksize               = 20
 vm-guest-id            = "ubuntu64Guest"
 vsphere-unverified-ssl = "true"
 vsphere-datacenter     = "Datacenter"
