@@ -53,13 +53,13 @@ variable "vm_hostname" {
 }
 
 variable "vm_ipaddress" {
- type = init
+ type = string
  default = ""
  description = "VM ip address default er /24"
 }
 
 variable "vm_gateway" {
- type = init
+ type = string
  default = ""
  description = "VM gateway"
 }
