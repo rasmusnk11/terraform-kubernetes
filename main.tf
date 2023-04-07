@@ -1,12 +1,3 @@
-terraform {
-  required_providers {
-    vsphere = {
-      source = "hashicorp/vsphere"
-      version = "2.2.0"
-    }
-  }
-}
-
 provider "vsphere" {
   user                 = var.vsphere_user
   password             = var.vsphere_password
@@ -14,75 +5,57 @@ provider "vsphere" {
   allow_unverified_ssl = true
 }
 
-locals {
-  templatevars = {
-    name         = var.name,
-    ipv4_address = var.ipv4_address,
-    ipv4_gateway = var.ipv4_gateway,
-    dns_server_1 = var.dns_server_list[0],
-    dns_server_2 = var.dns_server_list[1],
-    public_key = var.public_key,
-    ssh_username = var.ssh_username
-  }
-}
-
 data "vsphere_datacenter" "datacenter" {
-  name = var.vsphere-datacenter
+  name = "LAB-SILK"
 }
 
 data "vsphere_datastore" "datastore" {
-  name          = var.vm-datastore
+  name          = "System"
   datacenter_id = data.vsphere_datacenter.datacenter.id
 }
 
 data "vsphere_compute_cluster" "cluster" {
-  name          = var.vsphere-cluster
+  name          = "LAB-SILK"
   datacenter_id = data.vsphere_datacenter.datacenter.id
 }
 
 data "vsphere_network" "network" {
-  name          = var.vm-network
+  name          = "Kubernetes (Vlan 110)"
   datacenter_id = data.vsphere_datacenter.datacenter.id
 }
 
 data "vsphere_virtual_machine" "template" {
-  name          = "/${var.vsphere-datacenter}/vm/${var.vsphere-template-folder}/${var.vm-template-name}"
+  name          = "ubuntu-temp-22.04.2"
   datacenter_id = data.vsphere_datacenter.datacenter.id
 }
 
 resource "vsphere_virtual_machine" "vm" {
-  name             = var.name
+  name             = "silk-kube-master01"
   resource_pool_id = data.vsphere_compute_cluster.cluster.resource_pool_id
   datastore_id     = data.vsphere_datastore.datastore.id
-  num_cpus             = var.cpu
-  num_cores_per_socket = var.cores-per-socket
-  memory               = var.ram
-  guest_id             = var.vm-guest-id
+
+  num_cpus         = 2
+  memory           = 2048
+  guest_id         = "ubuntu64Guest"
   network_interface {
-    network_id   = data.vsphere_network.network.id
-    adapter_type = data.vsphere_virtual_machine.template.network_interface_types[0]
+    network_id = data.vsphere_network.network.id
   }
   disk {
-    label            = "${var.name}-disk"
-    thin_provisioned = data.vsphere_virtual_machine.template.disks.0.thin_provisioned
-    eagerly_scrub    = data.vsphere_virtual_machine.template.disks.0.eagerly_scrub
-    size             = var.disksize == "" ? data.vsphere_virtual_machine.template.disks.0.size : var.disksize 
+    label = "silk-kube-master01"
+    size  = 20
   }
   clone {
     template_uuid = data.vsphere_virtual_machine.template.id
-  }
-  extra_config = {
-    "guestinfo.metadata"          = base64encode(templatefile("${path.module}/templates/metadata.yaml", local.templatevars))
-    "guestinfo.metadata.encoding" = "base64"
-    "guestinfo.userdata"          = base64encode(templatefile("${path.module}/templates/userdata.yaml", local.templatevars))
-    "guestinfo.userdata.encoding" = "base64"
-  }
-  lifecycle {
-    ignore_changes = [
-      annotation,
-      clone[0].template_uuid,
-      clone[0].customize[0].dns_server_list,
-      clone[0].customize[0].network_interface[0]
-    ]
+    customize {
+      linux_options {
+        host_name = "silk-kube-master01"
+        domain    = "example.com"
+      }
+      network_interface {
+        ipv4_address = "10.200.110.100"
+        ipv4_netmask = 24
+      }
+      ipv4_gateway = "10.200.110.1"
+    }
   }
 }
