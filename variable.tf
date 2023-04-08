@@ -41,3 +41,16 @@ variable "vm_ipaddress" {
 variable "vm_gateway" {
  description = "VM gateway"
 }
+
+variable "master_ips" {
+  type        = map(any)
+  description = "List of ips address"
+}
+
+variable "ipv4_netmask" {
+  description = "ipv4 netmask"
+}
+
+variable "dns_servers" {
+  description = "dns server"
+}

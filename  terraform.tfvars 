@@ -12,3 +12,12 @@ vsphere_template        = "ubuntu-temp-22042"
 vm_hostname             = "silk-kube-master"
 vm_ipaddress            = "10.200.110.11"
 vm_gateway              = "10.200.110.1"
+
+master_ips = {
+  "0" = "10.200.110.11"
+  "1" = "10.200.110.12"
+  "2" = "10.200.110.13"
+}
+
+ipv4_netmask            = "24"
+dns_servers             = "1.1.1.1"

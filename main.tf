@@ -30,6 +30,7 @@ data "vsphere_virtual_machine" "template" {
 }
 
 resource "vsphere_virtual_machine" "vm" {
+  count            = length(var.master_ips)
   name             = var.vm_hostname
   resource_pool_id = data.vsphere_compute_cluster.cluster.resource_pool_id
   datastore_id     = data.vsphere_datastore.datastore.id
@@ -52,10 +53,11 @@ resource "vsphere_virtual_machine" "vm" {
         domain    = "example.com"
       }
       network_interface {
-        ipv4_address = var.vm_ipaddress
-        ipv4_netmask = 24
+        ipv4_address = lookup(var.master_ips, count.index)
+        ipv4_netmask = var.ipv4_netmask
       }
       ipv4_gateway = var.vm_gateway
+      dns_server_list = [var.dns_servers]
     }
   }
 }
