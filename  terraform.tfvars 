@@ -1,1 +1,14 @@
-vsphere_user    = "administrator@vsphere.local"
+#vsphere provider 
+vsphere_user            = "administrator@vsphere.local"
+vsphere_password        = "password"
+vsphere_server          = "server"
+vsphere_datacenter      = "LAB-SILK"
+vsphere_datastore       = "System"
+vsphere_compute_cluster = "LAB-SILK"
+vsphere_network         = "Kubernetes (Vlan 110)"
+vsphere_template        = "ubuntu-temp-22042"
+
+#VM specifik setings
+vm_hostname             = "silk-kube-master"
+vm_ipaddress            = "10.200.110.11"
+vm_gateway              = "10.200.110.1"
