@@ -10,7 +10,7 @@ data "vsphere_datacenter" "datacenter" {
 }
 
 data "vsphere_datastore" "datastore" {
-  name          = var.vsphere_datastorer
+  name          = var.vsphere_datastore
   datacenter_id = data.vsphere_datacenter.datacenter.id
 }
 
