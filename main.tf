@@ -6,7 +6,7 @@ provider "vsphere" {
 }
 
 data "vsphere_datacenter" "datacenter" {
-  name = var.vsphere_datacente
+  name = var.vsphere_datacenter
 }
 
 data "vsphere_datastore" "datastore" {
