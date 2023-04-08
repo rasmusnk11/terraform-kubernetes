@@ -31,7 +31,7 @@ data "vsphere_virtual_machine" "template" {
 
 resource "vsphere_virtual_machine" "vm" {
   count            = length(var.master_ips)
-  name             = var.vm_hostname
+  name             = "${var.vm_hostname}0${count.index + 1}"
   resource_pool_id = data.vsphere_compute_cluster.cluster.resource_pool_id
   datastore_id     = data.vsphere_datastore.datastore.id
 
@@ -42,14 +42,14 @@ resource "vsphere_virtual_machine" "vm" {
     network_id = data.vsphere_network.network.id
   }
   disk {
-    label = var.vm_hostname
+    label = "${var.vm_hostname}0${count.index + 1}"
     size  = 20
   }
   clone {
     template_uuid = data.vsphere_virtual_machine.template.id
     customize {
       linux_options {
-        host_name = var.vm_hostname
+        host_name = "${var.vm_hostname}0${count.index + 1}"
         domain    = "example.com"
       }
       network_interface {
