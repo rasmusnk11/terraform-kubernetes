@@ -1,6 +1,4 @@
 variable "vsphere_user" {
- type = string
- default = ""
  description = "vsphere user"
 }
 
