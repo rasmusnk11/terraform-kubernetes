@@ -75,8 +75,4 @@ resource "null_resource" "authorized_keys" {
     destination = "/home/rasmus/.ssh/authorized_keys"
     content     = var.ssh_keys
   }
-  provisioner "file" {
-    destination = /etc/sudoers.d/var.admin_username
-    content     = var.admin_username ALL=(ALL:ALL) NOPASSWD: ALL
-  }
 }
