@@ -54,3 +54,7 @@ variable "ipv4_netmask" {
 variable "dns_servers" {
   description = "dns server"
 }
+
+variable "domain" {
+  description = "dns server"
+}

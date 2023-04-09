@@ -50,7 +50,7 @@ resource "vsphere_virtual_machine" "vm" {
     customize {
       linux_options {
         host_name = "${var.vm_hostname}0${count.index + 1}"
-        domain    = "example.com"
+        domain    = var.domain
       }
       network_interface {
         ipv4_address = lookup(var.master_ips, count.index)
