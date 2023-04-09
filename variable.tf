@@ -34,10 +34,6 @@ variable "vm_hostname" {
  description = "VM hostname wil be vm name in vspaher"
 }
 
-variable "vm_ipaddress" {
- description = "VM ip address default er /24"
-}
-
 variable "vm_gateway" {
  description = "VM gateway"
 }
