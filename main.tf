@@ -61,3 +61,19 @@ resource "vsphere_virtual_machine" "vm" {
     }
   }
 }
+
+resource "null_resource" "authorized_keys" {
+  count            = length(var.master_ips)
+  connection {
+    type     = "ssh"
+    host     = lookup(var.master_ips, count.index)
+    user     = var.admin_username
+    password = var.admin_password
+  }
+
+  provisioner "file" {
+    destination = "/home/rasmus/.ssh/authorized_keys"
+    content     = var.ssh_keys
+  }
+
+}

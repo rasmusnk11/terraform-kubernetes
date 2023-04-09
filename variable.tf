@@ -58,3 +58,15 @@ variable "dns_servers" {
 variable "domain" {
   description = "dns server"
 }
+
+variable "admin_username" {
+  description = "admin username to template"
+}
+
+variable "admin_password" {
+  description = "admin password to template"
+}
+
+variable "ssh_keys" {
+  description = "ssh key"
+}
