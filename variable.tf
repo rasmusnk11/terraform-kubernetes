@@ -43,6 +43,11 @@ variable "master_ips" {
   description = "List of ips address"
 }
 
+variable "worker_ips" {
+  type        = map(any)
+  description = "List of ips address"
+}
+
 variable "ipv4_netmask" {
   description = "ipv4 netmask"
 }
