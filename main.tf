@@ -29,7 +29,7 @@ data "vsphere_virtual_machine" "template" {
   datacenter_id = data.vsphere_datacenter.datacenter.id
 }
 
-resource "vsphere_virtual_machine" "vm" {
+resource "vsphere_virtual_machine" "master" {
   count            = length(var.master_ips)
   name             = "${var.vm_hostname}-master0${count.index + 1}"
   resource_pool_id = data.vsphere_compute_cluster.cluster.resource_pool_id
@@ -62,22 +62,7 @@ resource "vsphere_virtual_machine" "vm" {
   }
 }
 
-resource "null_resource" "authorized_keys" {
-  count            = length(var.master_ips)
-  connection {
-    type     = "ssh"
-    host     = lookup(var.master_ips, count.index)
-    user     = var.admin_username
-    password = var.admin_password
-  }
-
-  provisioner "file" {
-    destination = "/home/rasmus/.ssh/authorized_keys"
-    content     = var.ssh_keys
-  }
-}
-
-resource "vsphere_virtual_machine" "vm" {
+resource "vsphere_virtual_machine" "worker" {
   count            = length(var.worker_ips)
   name             = "${var.vm_hostname}-worker0${count.index + 1}"
   resource_pool_id = data.vsphere_compute_cluster.cluster.resource_pool_id
@@ -107,20 +92,5 @@ resource "vsphere_virtual_machine" "vm" {
       ipv4_gateway = var.vm_gateway
       dns_server_list = [var.dns_servers]
     }
-  }
-}
-
-resource "null_resource" "authorized_keys" {
-  count            = length(var.worker_ips)
-  connection {
-    type     = "ssh"
-    host     = lookup(var.worker_ips, count.index)
-    user     = var.admin_username
-    password = var.admin_password
-  }
-
-  provisioner "file" {
-    destination = "/home/rasmus/.ssh/authorized_keys"
-    content     = var.ssh_keys
   }
 }
