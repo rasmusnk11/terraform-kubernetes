@@ -71,3 +71,11 @@ variable "admin_password" {
 variable "ssh_keys" {
   description = "ssh key"
 }
+
+variable "proxy_hostname" {
+  description = "ssh key"
+}
+
+variable "proxy_ips" {
+  description = "ssh key"
+}

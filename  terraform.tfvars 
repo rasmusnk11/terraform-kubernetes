@@ -30,3 +30,9 @@ domain                  = "domain_exampel.local"
 admin_username          = "username"
 admin_password          = "password"
 ssh_keys                = "ssh key"
+
+proxy_hostname          = "haproxy"
+proxy_ips = {
+  "0" = "10.200.110.221"
+  "1" = "10.200.110.222"
+}
