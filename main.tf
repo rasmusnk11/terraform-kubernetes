@@ -95,8 +95,8 @@ resource "vsphere_virtual_machine" "worker" {
   }
 }
 
-resource "vsphere_virtual_machine" "worker" {
-  count            = length(var.worker_ips)
+resource "vsphere_virtual_machine" "ha" {
+  count            = length(var.proxy_ips)
   name             = "${var.proxy_hostname}0${count.index + 1}"
   resource_pool_id = data.vsphere_compute_cluster.cluster.resource_pool_id
   datastore_id     = data.vsphere_datastore.datastore.id
