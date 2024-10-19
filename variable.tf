@@ -57,7 +57,7 @@ variable "dns_servers" {
 }
 
 variable "domain" {
-  description = "dns server"
+  description = "domainname"
 }
 
 variable "admin_username" {
@@ -73,9 +73,10 @@ variable "ssh_keys" {
 }
 
 variable "proxy_hostname" {
-  description = "ssh key"
+  description = "hostname of proxy"
 }
 
 variable "proxy_ips" {
-  description = "ssh key"
+  type        = map(any)
+  description = "List of ips address"
 }
